@@ -23,49 +23,23 @@ pool.on('error', (err) => {
 });
 
 /**
- * Serie.
- * @typedef {Object} Serie
- * @property {number | null} id - ID of serie, if defined
- * @property {string} name Name of serie
- * @property {Date} airDate First aired
- * @property {boolean} inProduction Serie is in production?
- * @property {string | null} tagline Tagline, if defined for serie
+ * Product.
+ * @typedef {Object} Product
+ * @property {number | null} id - ID of a product, if defined
+ * @property {string} name Name of a product
+ * @property {number} prize Prize of a product
+ * @property {string} description description of a product
  * @property {string} image Path to image
- * @property {string | null} description Description of serie
- * @property {string} language ISO 639-1 language code
- * @property {string | null} network Network series is shown on
- * @property {string | null} url URL of serie if defined
+ * @property {number} categorie id of the categorie this product belongs to
+ * @property {Date} created Date of first put on the menu
+ * @property {Date} updated Date of when this product was updated
  */
 
 /**
- * Genre.
- * @typedef {Object} Genre
- * @property {number | null} id - ID of genre, if defined
- * @property {string} name Name of genre
- */
-
-/**
- * Season.
- * @typedef {Object} Season
- * @property {number | null} id - ID of season, if defined
- * @property {number | null} serieId - ID of serie, if defined
- * @property {string} name Name of season
- * @property {string} number Number of season
- * @property {Date} airDate First aired
- * @property {string | null} overview Overview, if defined for season
- * @property {string} poster Path to poster
- */
-
-/**
- * Episode.
- * @typedef {Object} Episode
- * @property {number | null} id - ID of episode, if defined
- * @property {number | null} serieId - ID of serie, if defined
- * @property {number | null} seasonId - ID of season, if defined
- * @property {string} name Name of episode
- * @property {string} number Number of episode
- * @property {Date} airDate First aired
- * @property {string | null} overview Overview, if defined for episode
+ * Categorie.
+ * @typedef {Object} Categorie
+ * @property {number | null} id - ID of categorie, if defined
+ * @property {string} name Name of categorie
  */
 
 export async function query(_query, values = []) {
@@ -123,41 +97,33 @@ export async function end() {
 }
 
 /**
- * Insert a new serie.
+ * Insert a new product.
  *
- * @param {Serie} serie Serie to create.
- * @return {Serie} Serie created, with ID.
+ * @param {Product} product Serie to create.
+ * @return {Product} Procut created, with ID.
  */
-export async function insertSerie({
+export async function insertProduct({
   name,
-  airDate,
-  inProduction,
-  tagline,
-  image,
+  prize,
   description,
-  language,
-  network,
-  url,
+  image,
+  categorie,
 }) {
   const q = `
     INSERT INTO
-      series
-      (name, air_date, in_production, tagline, image, description, language, network, url)
+      products
+      (name, prize, description, image, categorie)
     VALUES
-      ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      ($1, $2, $3, $4, $5)
     RETURNING
-      id, name, air_date, in_production, tagline, image, description, language, network, url
+      id, name, prize, description, image, categorie
   ;`;
   const values = [
     xss(name),
-    airDate,
-    !!inProduction,
-    tagline ? xss(tagline) : null,
+    prize,
+    xss(description),
     xss(image),
-    description ? xss(description) : null,
-    xss(language),
-    network ? xss(network) : network,
-    url ? xss(url) : url,
+    categorie,
   ];
 
   try {
@@ -170,100 +136,17 @@ export async function insertSerie({
   return null;
 }
 
-/**
- * Insert a new season.
- *
- * @param {Season} season Season to create.
- * @return {Season} Season created, with ID.
- */
-export async function insertSeason({
-  name,
-  number,
-  airDate,
-  overview,
-  poster,
-  serieId,
-}) {
-  const q = `
-    INSERT INTO
-      seasons
-      (name, "number", air_date, overview, poster, serieId)
-    VALUES
-      ($1, $2, $3, $4, $5, $6)
-    RETURNING
-      id, name, "number", air_date, overview, poster, serieId;
-  `;
-  const values = [
-    xss(name),
-    xss(number),
-    airDate,
-    overview ? xss(overview) : null,
-    xss(poster),
-    xss(serieId),
-  ];
-
-  try {
-    const result = await query(q, values);
-    return result.rows[0];
-  } catch (e) {
-    logger.error('Error inserting season', e);
-  }
-
-  return null;
-}
 
 /**
- * Insert a new episode.
+ * Insert a categorie.
  *
- * @param {Episode} episodes Episode to create.
- * @return {Episode} Episode created, with ID.
+ * @param {string} name Name of categorie
+ * @return {Categorie} Categorie created, with ID.
  */
-export async function insertEpisode({
-  name,
-  number,
-  airDate,
-  overview,
-  seasonId,
-  serieId,
-}) {
-  const q = `
-    INSERT INTO
-      episodes
-      (name, "number", air_date, overview, seasonId, serieId)
-    VALUES
-      ($1, $2, $3, $4, $5, $6)
-    RETURNING
-      id, name, "number", air_date, overview, seasonId, serieId;
-  `;
-  const values = [
-    xss(name),
-    xss(number),
-    airDate,
-    overview ? xss(overview) : null,
-    xss(seasonId),
-    xss(serieId),
-  ];
-
-  try {
-    const result = await query(q, values);
-    return result.rows[0];
-  } catch (e) {
-    logger.error('Error inserting episode', e);
-  }
-
-  return null;
-}
-
-/**
- * Insert a genre.
- *
- * @param {string} name Name of genre
- * @return {Genre} Genre created, with ID.
- */
-export async function insertGenre(name) {
+export async function insertCategorie(name) {
   try {
     const result = await query(
-      'INSERT INTO genres (name) VALUES ($1) RETURNING id, name;',
+      'INSERT INTO categories (name) VALUES ($1) RETURNING id, name;',
       [xss(name)],
     );
     return result.rows[0];
@@ -273,7 +156,7 @@ export async function insertGenre(name) {
 
   return null;
 }
-
+/*
 export async function insertSerieGenre(serieId, genreId) {
   try {
     const result = await query(
@@ -287,7 +170,7 @@ export async function insertSerieGenre(serieId, genreId) {
 
   return null;
 }
-
+*/
 // TODO refactor
 export async function conditionalUpdate(table, id, fields, values) {
   const filteredFields = fields.filter((i) => typeof i === 'string');

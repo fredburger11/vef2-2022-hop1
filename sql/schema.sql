@@ -15,10 +15,10 @@ CREATE TABLE products (
   prize INTEGER NOT NULL,
   description TEXT NOT NULL,
   image VARCHAR(255) NOT NULL,
-  categories INTEGER NOT NULL,
+  categorie INTEGER NOT NULL,
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT FK_products_categories FOREIGN KEY (categories) REFERENCES categories (id) ON DELETE CASCADE
+  CONSTRAINT FK_products_categories FOREIGN KEY (categorie) REFERENCES categories (id) ON DELETE CASCADE
 );
 
 -- basket tables --
