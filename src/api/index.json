@@ -1,0 +1,127 @@
+{
+  "menu": {
+    "products": {
+      "href": "/menu",
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    "productquery": {
+      "href": "/menu?search={query}",
+      "methods": [
+        "GET"
+      ]
+    },
+    "category": {
+      "href": "/menu?category={category}",
+      "methods": [
+        "GET"
+      ]
+    },
+    "product": {
+      "href": "/menu/:id",
+      "methods": [
+        "GET",
+        "PATCH",
+        "DELETE"
+      ]
+    }
+  },
+  "categories": {
+    "categories": {
+      "href": "/categories",
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    "category": {
+      "href": "/categories/:id",
+      "methods": [
+        "PATCH",
+        "DELETE"
+      ]
+    }
+  },
+  "carts": {
+    "makecart": {
+      "href": "/cart",
+      "methods": [
+        "POST"
+      ]
+    },
+    "cart": {
+      "href": "/cart/:cartid",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ]
+    },
+    "line": {
+      "href": "/cart/:cartid/line/:id",
+      "methods": [
+        "GET",
+        "PATCH",
+        "DELETE"
+      ]
+    }
+  },
+  "orders": {
+    "orders": {
+      "href": "/orders",
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    "order": {
+      "href": "/orders/:id",
+      "methods": [
+        "GET"
+      ]
+    },
+    "orderstatus": {
+      "href": "/orders/:id/status",
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    }
+  },
+  "users": {
+    "users": {
+      "href": "/users",
+      "methods": [
+        "GET"
+      ]
+    },
+    "user": {
+      "href": "/users/:id",
+      "methods": [
+        "GET",
+        "PATCH"
+      ]
+    },
+    "register": {
+      "href": "/users/register",
+      "methods": [
+        "POST"
+      ]
+    },
+    "login": {
+      "href": "/users/login",
+      "methods": [
+        "POST"
+      ]
+    },
+    "me": {
+      "href": "/users/me",
+      "methods": [
+        "GET",
+        "PATCH"
+      ]
+    }
+  }
+}

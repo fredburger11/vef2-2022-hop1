@@ -1,7 +1,9 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import { router as apiRouter } from './api/index.js';
 import passport from './auth/passport.js';
 import { cors } from './utils/cors.js';
+
 
 
 dotenv.config();
@@ -29,7 +31,7 @@ app.use((req, res, next) => {
   return next();
 });
 
-//app.use();
+app.use(apiRouter);
 //app.use();
 
 app.use(cors);
