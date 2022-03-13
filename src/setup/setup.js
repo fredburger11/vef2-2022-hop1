@@ -4,7 +4,7 @@ import fs from 'fs';
 import { dirname, extname, join } from 'path';
 import { fileURLToPath } from 'url';
 import {
-  end, insertCategorie, insertProduct, query
+  end, insertCategory, insertProduct, query
 } from '../db.js';
 import { listImages, uploadImage } from '../utils/cloudinary.js';
 import { readDir, readFile, stat } from '../utils/fs-helpers.js';
@@ -86,17 +86,17 @@ async function readCsv(filename) {
 
 /**
  * Bætir við tegund eða skilar ID á henni ef til.
- * @param {string} categorie Tegund sem útbúa skal eða skila ID fyrir
+ * @param {string} category Tegund sem útbúa skal eða skila ID fyrir
  * @returns {string} ID á tegund.
  */
 
-async function insertCategorieOrExisiting(categorie) {
-  if (!categIds.has(categorie)) {
-    const insertedCategorie = await insertCategorie(categorie);
-    categIds.set(categorie, insertedCategorie.id);
+async function insertCategoryOrExisiting(category) {
+  if (!categIds.has(category)) {
+    const insertedCategory = await insertCategory(category);
+    categIds.set(category, insertedCategory.id);
   }
 
-  return categIds.get(categorie);
+  return categIds.get(category);
 }
 
 /**
@@ -133,8 +133,8 @@ async function products() {
     prodIds.set(csvId, { id, products: [] });
 
     for (const product of products.split(',')) {
-      const categId = await insertCategorieOrExisiting(categories);
-      //await insertCategorie(id, categId);
+      const categId = await insertCategoryOrExisiting(categories);
+      //await insertCategory(id, categId);
     }
 
   }
