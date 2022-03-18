@@ -2,6 +2,7 @@ import xss from 'xss';
 import { pagedQuery, singleQuery } from '../db.js';
 import { addPageMetadata } from '../utils/addPageMetadata.js';
 import { logger } from '../utils/logger.js';
+import { insertCategory } from '../db.js';
 
 
 export async function listCategories(req, res) {
