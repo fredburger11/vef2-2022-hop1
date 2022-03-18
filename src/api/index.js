@@ -18,6 +18,7 @@ import {
   atLeastOneBodyValueValidator,
 } from '../validation/validators.js';
 import { validationCheck } from '../validation/helpers.js';
+import { addLineToBasket, createBasket, deleteBasket } from './baskets.js';
 
 
 
@@ -138,6 +139,7 @@ router.delete(
 router.post(
   '/cart',
   /*býr til körfu og skilar*/
+  catchErrors(createBasket)
 );
 
 router.get(
@@ -148,11 +150,13 @@ router.get(
 router.post(
   '/cart/:cartid',
   /*bætir vöru við í körfu*/
+  catchErrors(addLineToBasket)
 );
 
 router.delete(
   '/cart/:cartid',
   /*Eyðir körfu með cartid*/
+  catchErrors(deleteBasket)
 );
 
 router.get(
