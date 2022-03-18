@@ -18,7 +18,7 @@ build
 
 npm-debug.log*
 
-.env
+# .env
 
 .cache/
 
