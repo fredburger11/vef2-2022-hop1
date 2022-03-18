@@ -8,6 +8,16 @@ import { readFile } from '../utils/fs-helpers.js';
 import { createcategory, deleteCategory, listCategories, updateCategory } from './categories.js';
 import { createProduct, deleteProduct, listProductById, listProducts, updateProduct } from './products.js';
 import { listUser, listUsers, updateUser } from './users.js';
+import { listOrders } from './orders.js';
+
+import {
+  adminValidator,
+  pagingQuerystringValidator,
+  validateResourceExists,
+  validateResourceNotExists,
+  atLeastOneBodyValueValidator,
+} from '../validation/validators.js';
+import { validationCheck } from '../validation/helpers.js';
 
 
 
@@ -165,6 +175,9 @@ router.delete(
 router.get(
   '/orders',
   requireAdmin,
+  pagingQuerystringValidator,
+  validationCheck,
+  listOrders,
   /*Skilar síðu af pöntunum*/
 );
 
