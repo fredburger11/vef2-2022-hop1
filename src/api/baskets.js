@@ -1,5 +1,5 @@
 import xss from 'xss';
-import { deleteQuery, insertLineToBasket, pagedQuery, singleQuery } from '../db.js';
+import { deleteQuery, pagedQuery, singleQuery } from '../db.js';
 import { addPageMetadata } from '../utils/addPageMetadata.js';
 import { logger } from '../utils/logger.js';
 
@@ -61,7 +61,7 @@ export async function deleteBasket(req, res) {
   return res.status(500).json(null);
 }
 
-
+/*
 export async function addLineToBasket(req, res) {
   const { productId, nrofproducts } = req.body;
   const { cartid } = req.params;
@@ -73,6 +73,9 @@ export async function addLineToBasket(req, res) {
   }
   return res.status(201).json(result);
 }
+<<<<<<< HEAD
+*/
+=======
 
 export async function getLineFromBasket(req, res) {
   const { cartid, id } = req.params;
@@ -141,3 +144,4 @@ export async function deleteLineFromBasket(req, res) {
   }
   return res.status(500).json(null);
 }
+>>>>>>> 079c660534f3b9af634c2c66b29484cff800146e
