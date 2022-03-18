@@ -47,11 +47,11 @@ CREATE TABLE IF NOT EXISTS orders (
 
 CREATE TABLE IF NOT EXISTS linesinorder (
   productId INTEGER NOT NULL,
-  basketId uuid NOT NULL,
+  orderId uuid NOT NULL,
   nrofproducts INTEGER NOT NULL,
   CONSTRAINT nrofprodnotnull check (nrofproducts > 0),
   CONSTRAINT FK_prod_product FOREIGN KEY (productId) REFERENCES products (id) ON DELETE CASCADE,
-  CONSTRAINT FK_bask_basket FOREIGN KEY (basketId) REFERENCES basket (id) ON DELETE CASCADE
+  CONSTRAINT FK_order FOREIGN KEY (orderId) REFERENCES orders (id) ON DELETE CASCADE
 );
 
 DROP TYPE IF EXISTS stateoforder CASCADE;

@@ -8,7 +8,7 @@ import { readFile } from '../utils/fs-helpers.js';
 import { createcategory, deleteCategory, listCategories, updateCategory } from './categories.js';
 import { createProduct, deleteProduct, listProductById, listProducts, updateProduct } from './products.js';
 import { listUser, listUsers, updateUser } from './users.js';
-import { listOrders } from './orders.js';
+import { listOrders, createOrder } from './orders.js';
 
 import {
   adminValidator,
@@ -183,6 +183,7 @@ router.get(
 
 router.post(
   '/orders',
+  catchErrors(createOrder),
   /*býr til pöntun, skilar stöðu og auðkenni*/
 );
 
