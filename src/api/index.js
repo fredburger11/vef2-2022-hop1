@@ -18,8 +18,8 @@ import {
 } from '../validation/validators.js';
 import { validationCheck } from '../validation/helpers.js';
 import {
-  listBasket, addLineToBasket, createBasket, deleteBasket,
-  deleteLineFromBasket, getLineFromBasket, updateLineInBasket
+  addLineToBasket, createBasket, deleteBasket, deleteLineFromBasket,
+  getLineFromBasket, updateLineInBasket, listBasket
 } from './baskets.js';
 
 
