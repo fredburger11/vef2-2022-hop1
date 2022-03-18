@@ -1,16 +1,16 @@
 name,price,description,image,category
-Humarpizza,2800,humar klettasalat parmesan & basilolía,lobsterpizza.jpg,1
-Special,2600,pepporoni rauðlaukur paprika & rjómaostur,specialpizza.jpg,1
-Deluxe,2800,pepporoni kjúklingur fetaostur & parmesan,deluxepizza.jpg,1
-Ostborgari,2650,Salat tómatur gúrka & rauðlaukur,cheeseburger.jpg,2
-Beikonborgari,2950,Salat tómatur rauðlaukur & beikon,baconburger.jpg,2
-BBQborgari,2950,Beikon klettasalat majones & sýrður rauðlaukur,bbqburger.jpg,2
-Regnboga uramaki,3300,Risarækja lax túnfiskur & vorlaukur,rainbowurakami.jpg,3
-New York uramaki,3050,Lax gúrka lárpera & steiktur laukur,nyuramarki.jpg,3
-Vegan uramaki,3050,Íssalat lárpera gúrka & graslaukur,veganuramaki.jpg,3
-Íslenskur Burrataostur,1950,Grillað súrdeigsbrauð basil & parmesan,islburrataostur.jpg,4
-Sashimi tvenna,1950,Túnfiskur lax sojasósa & wasabi,sashimi.jpg,4
-Skelfisksúpa,1950,Humar hörpuskel bláskel & sinnepsfræ,shellfishsoup.jpg,4
-Grillaður lax,4600,Stökkt kartöflusalat blaðkál & eldpipar,grilledsalmon.jpg,5
-Grillað nauta ribeye,6200,Portóbelló sveppir grillað romaine salat & dvergpipar,ribeye.jpg,5
-Hægelduð lambakóróna,6450,Kartöfluterrine gulrætur beyki sveppir & myrkilsveppasósa,lambkorona.jpg,5
+Humarpizza,2800,humar klettasalat parmesan & basilolía,lobsterpizza.jpg,pizza
+Special,2600,pepporoni rauðlaukur paprika & rjómaostur,specialpizza.jpg,pizza
+Deluxe,2800,pepporoni kjúklingur fetaostur & parmesan,deluxepizza.jpg,pizza
+Ostborgari,2650,Salat tómatur gúrka & rauðlaukur,cheeseburger.jpg,hamborgarar
+Beikonborgari,2950,Salat tómatur rauðlaukur & beikon,baconburger.jpg,hamborgarar
+BBQborgari,2950,Beikon klettasalat majones & sýrður rauðlaukur,bbqburger.jpg,hamborgarar
+Regnboga uramaki,3300,Risarækja lax túnfiskur & vorlaukur,rainbowurakami.jpg,sushi
+New York uramaki,3050,Lax gúrka lárpera & steiktur laukur,nyuramarki.jpg,sushi
+Vegan uramaki,3050,Íssalat lárpera gúrka & graslaukur,veganuramaki.jpg,sushi
+Íslenskur Burrataostur,1950,Grillað súrdeigsbrauð basil & parmesan,islburrataostur.jpg,forréttir
+Sashimi tvenna,1950,Túnfiskur lax sojasósa & wasabi,sashimi.jpg,forréttir
+Skelfisksúpa,1950,Humar hörpuskel bláskel & sinnepsfræ,shellfishsoup.jpg,forréttir
+Grillaður lax,4600,Stökkt kartöflusalat blaðkál & eldpipar,grilledsalmon.jpg,aðalréttir
+Grillað nauta ribeye,6200,Portóbelló sveppir grillað romaine salat & dvergpipar,ribeye.jpg,aðalréttir
+Hægelduð lambakóróna,6450,Kartöfluterrine gulrætur beyki sveppir & myrkilsveppasósa,lambkorona.jpg,aðalréttir

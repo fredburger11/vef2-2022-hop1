@@ -25,6 +25,7 @@ console.log(path);
  */
 const imageCloudinaryUrl = new Map();
 
+
 /**
  *  Möppun milli prodId úr prodId í CSV yfir product:
  *  {
@@ -37,9 +38,11 @@ const imageCloudinaryUrl = new Map();
  * Getum þá bætt vísanir við fyrir categories og products.
  * Uppfærum hlut eftir því sem við bætum við í gagnagrunn.
  */
+/* Þetta er líklega óþarfi, ekki relevant fyrir okkar gagnagrunn
 const prodIds = new Map();
+*/
 
-// Heiti á genre => Id á genre í gagnagrunni
+// Heiti á category => Id á category í gagnagrunni
 const categIds = new Map();
 
 /**
@@ -110,8 +113,8 @@ async function insertCategoryOrExisiting(category) {
 }
 
 /**
- * Les inn gögn um sjónvarpsþætti úr CSV skrá, les inn í grunn með tengdum
- * tegundum. Geymir lista af sjónvarpsþáttum í serieIds Map fyrir önnur
+ * Les inn gögn um vörur úr CSV skrá, les inn í grunn með tengdum
+ * tegundum. Geymir lista af vörum í prodIds Map fyrir önnur
  * innlestrar föll.
  */
 async function products() {
@@ -120,36 +123,35 @@ async function products() {
   const data = await readCsv(filename);
 
   for (const item of data) {
-    // Höldum utanum ID frá gagnagrunninum
-    const csvId = item.id;
 
     // Búum til sérstaklega og setjum ID í staðinn
     const { category } = item;
 
-    // Búum til Date object
-    item.airDate = new Date(item.airDate);
+    const categId = await insertCategoryOrExisiting(category);
 
+    /* TODO: okkur er sama um myndir í bili, laga
     const image = imageCloudinaryUrl.get(item.image);
 
     if (image) {
       item.image = image;
-    } else { /* TODO: okkur er sama um myndir í bili, laga seinna...
-      logger.warn(`Missing uploaded image for product "${item.name}"`); */
-    }
+    } else {  seinna...
+      logger.warn(`Missing uploaded image for product "${item.name}"`);
+    } */
+    //item.image = 'N/A'; // breyta seinna
+    item.categoryId = categId;
 
     const { id } = await insertProduct(item);
 
-    // Bætum við vísun í products möppun
-    prodIds.set(csvId, { id, products: [] });
-
+    // Bætum við vísun í products möppun, ÞARF EKKI?
+    //prodIds.set(csvId, { id, products: [] });
+    /*
     for (const product of products.split(',')) {
       const categId = await insertCategoryOrExisiting(category);
       //await insertCategory(id, categId);
     }
-
+    */
   }
 }
-
 
 
 async function images() {

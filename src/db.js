@@ -107,23 +107,23 @@ export async function insertProduct({
   price,
   description,
   image,
-  category,
+  categoryId,
 }) {
   const q = `
     INSERT INTO
       products
-      (name, price, description, image, category)
+      (name, price, description, image, categoryId)
     VALUES
       ($1, $2, $3, $4, $5)
     RETURNING
-      id, name, price, description, image, category
+      id, name, price, description, image, categoryId
   ;`;
   const values = [
     xss(name),
     price,
     xss(description),
     xss(image),
-    category,
+    categoryId,
   ];
 
   try {
@@ -151,7 +151,7 @@ export async function insertCategory(name) {
     );
     return result.rows[0];
   } catch (e) {
-    logger.error('Error inserting genre', e);
+    logger.error('Error inserting category', e);
   }
 
   return null;
