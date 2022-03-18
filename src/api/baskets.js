@@ -1,6 +1,5 @@
 import xss from 'xss';
-import { deleteQuery, pagedQuery, singleQuery } from '../db.js';
-import { addPageMetadata } from '../utils/addPageMetadata.js';
+import { deleteQuery, singleQuery } from '../db.js';
 import { logger } from '../utils/logger.js';
 
 
@@ -19,14 +18,6 @@ export async function createBasket(req, res) {
 
 export async function listBasket(req, res) {
   const { cartid } = req.params;
-  /*... vantar að útfæra summu af verði ...*/
-  const q = `
-    SELECT *
-    FROM basket
-    INNER JOIN
-    (SELECT basketId,sum(price) FROM linesinbasket)
-    WHERE id = $1
-  `;
 
   const result = await singleQuery(
     'SELECT * FROM linesinbasket WHERE basketId =$1;',
@@ -56,7 +47,7 @@ export async function deleteBasket(req, res) {
     }
     return res.status(200).json({});
   } catch (e) {
-    logger.error(`unable to delete basket ${id}`, e);
+    logger.error(`unable to delete basket ${cartid}`, e);
   }
   return res.status(500).json(null);
 }
@@ -66,7 +57,14 @@ export async function addLineToBasket(req, res) {
   const { productId, nrofproducts } = req.body;
   const { cartid } = req.params;
 
-  const result = await insertLineToBasket(cartid, productId, nrofproducts);
+  const result = await singleQuery(`
+    INSERT INTO linesinbasket
+      (productId, basketId, nrofproducts)
+    VALUES
+      ($1, $2, $3)
+    RETURNING *;`,
+    [xss(productId), xss(nrofproducts), xss(cartid)]
+  );
 
   if (!result) {
     return res.status(500).json({ error: 'Unable to insert line' });
@@ -121,7 +119,7 @@ export async function deleteLineFromBasket(req, res) {
   const { cartid, id } = req.params;
 
   try {
-    const result = await deleteQuery(`
+    const deletionrowCount = await deleteQuery(`
       DELETE FROM
         linesinbasket
       WHERE

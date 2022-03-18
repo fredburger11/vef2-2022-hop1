@@ -1,7 +1,6 @@
 import xss from 'xss';
-import { conditionalUpdate, deleteQuery, insertProduct, pagedQuery, singleQuery } from '../db.js';
+import { pagedQuery, singleQuery } from '../db.js';
 import { addPageMetadata } from '../utils/addPageMetadata.js';
-import { uploadImage } from '../utils/cloudinary.js';
 import { logger } from '../utils/logger.js';
 
 async function setStatusOfOrder(req, res) {
@@ -33,7 +32,7 @@ async function setStatusOfOrder(req, res) {
 
 export async function createOrder(req, res) {
   const { name } = req.body;
-  //const newOrder = 'NEW';
+  // const newOrder = 'NEW';
 
   try {
     const id = await singleQuery(

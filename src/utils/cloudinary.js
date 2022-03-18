@@ -5,12 +5,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const {
-  CLOUD_NAME: cloud_name,
-  API_KEY: api_key,
-  API_SECRET: api_secret
-} = process.env;
+// eslint-disable-next-line
+const { CLOUD_NAME: cloud_name, API_KEY: api_key, API_SECRET: api_secret } = process.env;
 
+// eslint-disable-next-line
 cloudinary.config({ cloud_name, api_key, api_secret })
 
 const resourcesAsync = util.promisify(cloudinary.api.resources);

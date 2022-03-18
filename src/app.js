@@ -32,7 +32,6 @@ app.use((req, res, next) => {
 });
 
 app.use(apiRouter);
-//app.use();
 
 app.use(cors);
 

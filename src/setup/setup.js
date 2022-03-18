@@ -17,30 +17,12 @@ const IMG_DIR = './../../data/img';
 const SQL_DIR = './../../sql';
 
 const path = dirname(fileURLToPath(import.meta.url));
-console.log(path);
 
 /**
  * Möppun á milli skráarnafns myndar og slóðar á Cloudinary
  * <skráarnafn> => <url>
  */
 const imageCloudinaryUrl = new Map();
-
-
-/**
- *  Möppun milli prodId úr prodId í CSV yfir product:
- *  {
- *    id: number,
- *    categories: [{
- *      number: number;
- *      id: number;
- *    }]
- *  }
- * Getum þá bætt vísanir við fyrir categories og products.
- * Uppfærum hlut eftir því sem við bætum við í gagnagrunn.
- */
-/* Þetta er líklega óþarfi, ekki relevant fyrir okkar gagnagrunn... eða hvað?
-const prodIds = new Map();
-*/
 
 // Heiti á category => Id á category í gagnagrunni
 const categIds = new Map();
@@ -138,16 +120,7 @@ async function products() {
     }
     item.categoryId = categId;
 
-    const { id } = await insertProduct(item);
-
-    // Bætum við vísun í products möppun, ÞARF EKKI?
-    //prodIds.set(csvId, { id, products: [] });
-    /*
-    for (const product of products.split(',')) {
-      const categId = await insertCategoryOrExisiting(category);
-      //await insertCategory(id, categId);
-    }
-    */
+    await insertProduct(item);
   }
 }
 

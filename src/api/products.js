@@ -1,8 +1,8 @@
 import xss from 'xss';
 import { conditionalUpdate, deleteQuery, insertProduct, pagedQuery, singleQuery } from '../db.js';
 import { addPageMetadata } from '../utils/addPageMetadata.js';
-import { uploadImage } from '../utils/cloudinary.js';
 import { logger } from '../utils/logger.js';
+import { isString } from '../utils/isString.js'
 
 
 export async function listProducts(req, res) {
@@ -125,7 +125,7 @@ export async function deleteProduct(req, res) {
 
   try {
     const deletionrowCount = await deleteQuery(
-      `DELETE FROM products WHERE id = $1;`, [id]
+      'DELETE FROM products WHERE id = $1;', [id]
     );
 
     if (deletionrowCount === 0) {

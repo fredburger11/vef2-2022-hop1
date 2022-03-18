@@ -1,52 +1,27 @@
 import express from 'express';
-import multer from 'multer';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { requireAuthentication, requireAdmin, addUserIfAuthenticated } from '../auth/passport.js';
+import { requireAdmin } from '../auth/passport.js';
 import { catchErrors } from '../utils/catchErrors.js';
 import { readFile } from '../utils/fs-helpers.js';
 import { createcategory, deleteCategory, listCategories, updateCategory } from './categories.js';
-import { createProduct, deleteProduct, listProductById, listProducts, updateProduct } from './products.js';
+import {
+  createProduct, deleteProduct, listProductById,
+  listProducts, updateProduct
+} from './products.js';
 import { listUser, listUsers, updateUser } from './users.js';
 import { listOrders, createOrder } from './orders.js';
-
 import {
   adminValidator,
   pagingQuerystringValidator,
-  validateResourceExists,
-  validateResourceNotExists,
-  atLeastOneBodyValueValidator,
+  validateResourceExists
 } from '../validation/validators.js';
 import { validationCheck } from '../validation/helpers.js';
-import { addLineToBasket, createBasket, deleteBasket, deleteLineFromBasket, getLineFromBasket, updateLineInBasket } from './baskets.js';
+import {
+  listBasket, addLineToBasket, createBasket, deleteBasket,
+  deleteLineFromBasket, getLineFromBasket, updateLineInBasket
+} from './baskets.js';
 
-
-
-const {
-  MULTER_TEMP_DIR,
-} = process.env;
-
-/**
- * Hjálparfall til að bæta multer við route.
- */
-function withMulter(req, res, next) {
-  multer({ dest: MULTER_TEMP_DIR })
-    .single('image')(req, res, (err) => {
-      if (err) {
-        if (err.message === 'Unexpected field') {
-          const errors = [{
-            field: 'image',
-            error: 'Unable to read image',
-          }];
-          return res.status(400).json({ errors });
-        }
-
-        return next(err);
-      }
-
-      return next();
-    });
-}
 
 export const router = express.Router();
 
@@ -73,7 +48,6 @@ router.get('/', async (req, res) => {
  *  RESULT, // Eitthvað sem sendir svar til client ef allt OK
  * );
  */
-// TODO: bæta validation á allt!!!
 // Routes fyrir matseðil
 
 router.get(
@@ -86,7 +60,7 @@ router.get(
 router.post(
   '/menu',
   requireAdmin,
-  /*býr til nýja vöru á matseðil*/
+  // býr til nýja vöru á matseðil
   catchErrors(createProduct)
 );
 
@@ -102,7 +76,7 @@ router.patch(
   requireAdmin,
   adminValidator,
   validationCheck,
-  /*uppfærir vöru*/
+  // uppfærir vöru
   catchErrors(updateProduct)
 );
 
@@ -111,7 +85,7 @@ router.delete(
   requireAdmin,
   adminValidator,
   validationCheck,
-  /*eyðir vöru*/
+  // eyðir vöru
   catchErrors(deleteProduct)
 );
 
@@ -119,7 +93,7 @@ router.get(
   '/categories',
   pagingQuerystringValidator,
   validationCheck,
-  /*skilar síðu af flokkum*/
+  // skilar síðu af flokkum
   catchErrors(listCategories)
 );
 
@@ -128,7 +102,7 @@ router.post(
   requireAdmin,
   adminValidator,
   validationCheck,
-  /*býr til nýjan flokk*/
+  // býr til nýjan flokk
   catchErrors(createcategory)
 );
 
@@ -137,7 +111,7 @@ router.patch(
   requireAdmin,
   adminValidator,
   validationCheck,
-  /*uppfærir flokk*/
+  // uppfærir flokk
   catchErrors(updateCategory)
 );
 
@@ -146,7 +120,7 @@ router.delete(
   requireAdmin,
   adminValidator,
   validationCheck,
-  /*eyðir flokk*/
+  // eyðir flokk
   catchErrors(deleteCategory)
 );
 
@@ -156,7 +130,7 @@ router.post(
   '/cart',
   pagingQuerystringValidator,
   validationCheck,
-  /*býr til körfu og skilar*/
+  // býr til körfu og skilar
   catchErrors(createBasket)
 );
 
@@ -164,7 +138,7 @@ router.get(
   '/cart/:cartid',
   pagingQuerystringValidator,
   validationCheck,
-  /*skilar körfu með cartid og reiknuðu heildarverði*/
+  // skilar körfu með cartid og reiknuðu heildarverði
   catchErrors(listBasket)
 );
 
@@ -172,7 +146,7 @@ router.post(
   '/cart/:cartid',
   pagingQuerystringValidator,
   validationCheck,
-  /*bætir vöru við í körfu*/
+  // bætir vöru við í körfu
   catchErrors(addLineToBasket)
 );
 
@@ -180,7 +154,7 @@ router.delete(
   '/cart/:cartid',
   pagingQuerystringValidator,
   validationCheck,
-  /*Eyðir körfu með cartid*/
+  // Eyðir körfu með cartid
   catchErrors(deleteBasket)
 );
 
@@ -188,7 +162,7 @@ router.get(
   'cart/:cartid/line/:id',
   pagingQuerystringValidator,
   validationCheck,
-  /*skilar línu í körfu*/
+  // skilar línu í körfu
   catchErrors(getLineFromBasket)
 );
 
@@ -196,7 +170,7 @@ router.patch(
   'cart/:cartid/line/:id',
   pagingQuerystringValidator,
   validationCheck,
-  /*uppfærir fjölda í línu*/
+  // uppfærir fjölda í línu
   catchErrors(updateLineInBasket)
 );
 
@@ -204,7 +178,7 @@ router.delete(
   'cart/:cartid/line/:id',
   pagingQuerystringValidator,
   validationCheck,
-  /*eyðir línu úr körfu*/
+  // eyðir línu úr körfu
   catchErrors(deleteLineFromBasket)
 );
 
@@ -216,29 +190,29 @@ router.get(
   pagingQuerystringValidator,
   validationCheck,
   catchErrors(listOrders),
-  /*Skilar síðu af pöntunum*/
+  // Skilar síðu af pöntunum
 );
 
 router.post(
   '/orders',
   catchErrors(createOrder),
-  /*býr til pöntun, skilar stöðu og auðkenni*/
+  // býr til pöntun, skilar stöðu og auðkenni
 );
 
 router.get(
   '/orders/:id',
-  /*skilar pöntun með öllum línum, gildum pöntunar, stöðu pöntunar og reiknuðu heildarverði körfu*/
+  // skilar pöntun með öllum línum, gildum pöntunar, stöðu pöntunar og reiknuðu heildarverði körfu
 );
 
 router.get(
   '/orders/:id/status',
-  /*skilar pöntun með stöðu pöntunar og lista af öllum stöðubreytingum hennar*/
+  // skilar pöntun með stöðu pöntunar og lista af öllum stöðubreytingum hennar
 );
 
 router.post(
   '/orders/:id/status',
   requireAdmin,
-  /*uppfærir stöðu pöntunar, aðeins ef notandi er stjórnandi*/
+  // uppfærir stöðu pöntunar, aðeins ef notandi er stjórnandi
 );
 
 // Routes fyrir notendur
@@ -249,7 +223,7 @@ router.get(
   validationCheck,
   pagingQuerystringValidator,
   listUsers,
-  /*skilar síðu af notendum*/
+  // skilar síðu af notendum
 );
 
 router.get(
@@ -258,7 +232,7 @@ router.get(
   validateResourceExists(listUser),
   validationCheck,
   returnResource,
-  /*Skilar notanda*/
+  // Skilar notanda
 );
 
 router.patch(
@@ -268,5 +242,5 @@ router.patch(
   adminValidator,
   validationCheck,
   catchErrors(updateUser),
-  /*breytir hvort notandi er stjórnandi eða ekki, aðeins ef notandi er ekki að breyta sér sjálfum*/
+  // breytir hvort notandi er stjórnandi eða ekki, aðeins ef notandi er ekki að breyta sér sjálfum
 );

@@ -13,7 +13,6 @@ import {
   emailDoesNotExistValidator,
   emailValidator,
   passwordValidator,
-  usernameAndPaswordValidValidator,
   usernameDoesNotExistValidator,
   usernameValidator,
 } from '../validation/validators.js';
@@ -39,7 +38,7 @@ async function registerRoute(req, res) {
 async function loginRoute(req, res) {
   const { username, email } = req.body;
 
-  const user = null;
+  let user = null;
 
   if (!username) {
     user = await findByUsername(username);

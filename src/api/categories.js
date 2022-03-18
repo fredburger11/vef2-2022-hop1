@@ -1,8 +1,7 @@
 import xss from 'xss';
-import { pagedQuery, singleQuery } from '../db.js';
 import { addPageMetadata } from '../utils/addPageMetadata.js';
 import { logger } from '../utils/logger.js';
-import { insertCategory } from '../db.js';
+import { deleteQuery, pagedQuery, singleQuery, insertCategory } from '../db.js';
 
 
 export async function listCategories(req, res) {
@@ -63,7 +62,7 @@ export async function deleteCategory(req, res) {
 
   try {
     const deletionrowCount = await deleteQuery(
-      `DELETE FROM categories WHERE id = $1;`, [id]
+      'DELETE FROM categories WHERE id = $1;', [id]
     );
 
     if (deletionrowCount === 0) {
