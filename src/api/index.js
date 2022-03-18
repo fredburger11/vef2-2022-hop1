@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import { requireAuthentication, requireAdmin, addUserIfAuthenticated } from '../auth/passport.js';
 import { catchErrors } from '../utils/catchErrors.js';
 import { readFile } from '../utils/fs-helpers.js';
-import { listProducts, listProductsInCategory } from './products.js';
+import { listProductById, listProducts } from './products.js';
 
 
 
@@ -61,7 +61,162 @@ router.get('/', async (req, res) => {
  * );
  */
 
+// Routes fyrir matseðil
+
 router.get(
   '/menu',
   catchErrors(listProducts)
+);
+
+router.post(
+  '/menu',
+  requireAdmin,
+  /*býr til nýja vöru á matseðil*/
+);
+
+router.get(
+  '/menu/:id',
+  catchErrors(listProductById)
+);
+
+router.patch(
+  '/menu/:id',
+  requireAdmin,
+  /*uppfærir vöru*/
+);
+
+router.delete(
+  '/menu/:id',
+  requireAdmin,
+  /*eyðir vöru*/
+);
+
+router.get(
+  '/categories',
+  /*skilar síðu af flokkum*/
+);
+
+router.post(
+  '/categories',
+  /*býr til nýjan flokk*/
+);
+
+router.patch(
+  '/categories/:id',
+  requireAdmin,
+  /*uppfærir flokk*/
+);
+
+router.delete(
+  '/categories/:id',
+  requireAdmin,
+  /*eyðir flokk*/
+);
+
+// Routes fyrir körfu
+
+router.post(
+  '/cart',
+  /*býr til körfu og skilar*/
+);
+
+router.get(
+  '/cart/:cartid',
+  /*skilar körfu með cartid og reiknuðu heildarverði*/
+);
+
+router.post(
+  '/cart/:cartid',
+  /*bætir vöru við í körfu*/
+);
+
+router.delete(
+  '/cart/:cartid',
+  /*Eyðir körfu með cartid*/
+);
+
+router.get(
+  'cart/:cartid/line/:id',
+  /*skilar línu í körfu*/
+);
+
+router.patch(
+  'cart/:cartid/line/:id',
+  /*uppfærir fjölda í línu*/
+);
+
+router.delete(
+  'cart/:cartid/line/:id',
+  /*eyðir línu úr körfu*/
+);
+
+// Routes fyrir pantanir
+
+router.get(
+  '/orders',
+  requireAdmin,
+  /*Skilar síðu af pöntunum*/
+);
+
+router.post(
+  '/orders',
+  /*býr til pöntun, skilar stöðu og auðkenni*/
+);
+
+router.get(
+  '/orders/:id',
+  /*skilar pöntun með öllum línum, gildum pöntunar, stöðu pöntunar og reiknuðu heildarverði körfu*/
+);
+
+router.get(
+  '/orders/:id/status',
+  /*skilar pöntun með stöðu pöntunar og lista af öllum stöðubreytingum hennar*/
+);
+
+router.post(
+  '/orders/:id/status',
+  requireAdmin,
+  /*uppfærir stöðu pöntunar, aðeins ef notandi er stjórnandi*/
+);
+
+// Routes fyrir notendur
+
+router.get(
+  '/users',
+  requireAdmin,
+  /*skilar síðu af notendum*/
+);
+
+router.get(
+  '/users/:id',
+  requireAdmin,
+  /*Skilar notanda*/
+);
+
+router.patch(
+  '/users/:id',
+  requireAdmin,
+  /*breytir hvort notandi er stjórnandi eða ekki, aðeins ef notandi er ekki að breyta sér sjálfum*/
+);
+
+router.post(
+  '/users/register',
+  /*býr til nýjan (ekki admin) notanda*/
+);
+
+router.post(
+  '/users/login',
+  /* skilar token ef rétt gögn*/
+);
+
+router.get(
+  '/users/me',
+  requireAuthentication,
+  /*skilar upplýsingum um notanda sem á token*/
+);
+
+router.patch(
+  '/users/me',
+  requireAuthentication,
+  /*uppfærir netfang og/eða lykilorð*/
 );

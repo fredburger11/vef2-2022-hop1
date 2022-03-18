@@ -106,6 +106,24 @@ export async function listProducts(req, res) {
   return res.json(productsWithPage);
 }
 
+export async function listProductById(req, res) {
+  const { id } = req.params;
+
+  const product = await singleQuery(`
+      SELECT
+        id, name, price, description, image, categoryId, created, updated
+      FROM
+        products
+      WHERE
+        id = $1
+      ORDER BY created DESC
+      `,
+    [xss(id)]
+  );
+
+  return res.json(product);
+}
+
 /*
 export async function listSerie(_, req) {
   const { serieId: id } = req.params;
