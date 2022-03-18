@@ -4,7 +4,7 @@ import { addPageMetadata } from '../utils/addPageMetadata.js';
 import { uploadImage } from '../utils/cloudinary.js';
 import { logger } from '../utils/logger.js';
 
-function setStatusOfOrder(req, res) {
+async function setStatusOfOrder(req, res) {
   const { id } = req.params;
   const { status } = req.body;
 
