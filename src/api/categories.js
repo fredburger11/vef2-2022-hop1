@@ -7,7 +7,7 @@ import { logger } from '../utils/logger.js';
 export async function listCategories(req, res) {
   const { offset = 0, limit = 10 } = req.query;
 
-  const genres = await pagedQuery(
+  const categories = await pagedQuery(
     `SELECT
         name
       FROM
