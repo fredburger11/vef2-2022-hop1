@@ -157,38 +157,6 @@ export async function insertCategory(name) {
   return null;
 }
 
-export async function insertLineToBasket(cartid, productId, nrofproducts) {
-  try {
-    const result = await query(`
-      INSERT INTO linesinbasket
-        (productId, basketId, nrofproducts)
-      VALUES
-        ($1, $2, $3)
-      RETURNING *;`,
-      [xss(productId), xss(cartid), xss(nrofproducts)]
-    );
-    return result.rows[0];
-  } catch (e) {
-    logger.error('Error inserting line into basket', e);
-  }
-  return null;
-}
-
-/*
-export async function insertSerieGenre(serieId, genreId) {
-  try {
-    const result = await query(
-      'INSERT INTO series_genres (serie, genre) VALUES ($1, $2);',
-      [xss(serieId), xss(genreId)],
-    );
-    return result.rows[0];
-  } catch (e) {
-    logger.error('Error inserting serie-genre relation', e);
-  }
-
-  return null;
-}
-*/
 // TODO refactor
 export async function conditionalUpdate(table, id, fields, values) {
   const filteredFields = fields.filter((i) => typeof i === 'string');
@@ -224,3 +192,5 @@ export async function conditionalUpdate(table, id, fields, values) {
 
   return result;
 }
+
+
