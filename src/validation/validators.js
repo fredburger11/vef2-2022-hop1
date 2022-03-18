@@ -141,7 +141,7 @@ export const adminValidator = body('admin')
     return Promise.resolve();
   });
 
-export const prizeValidator = body('prize')
+export const priceValidator = body('price')
   .isInt({ min: 1 })
   .withMessage('number must be an integer larger than 0');
 
@@ -260,9 +260,9 @@ export const serieValidators = [
 export const productValidators = [
   nameValidator,
   descriptionValidator,
-  prizeValidator,
+  priceValidator,
   imgValidator,
-  // TODO: categorie connection something
+  // TODO: category connection something
   createdDateValidator,
   updateDateValidator,
 

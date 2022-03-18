@@ -27,19 +27,19 @@ pool.on('error', (err) => {
  * @typedef {Object} Product
  * @property {number | null} id - ID of a product, if defined
  * @property {string} name Name of a product
- * @property {number} prize Prize of a product
+ * @property {number} price Price of a product
  * @property {string} description description of a product
  * @property {string} image Path to image
- * @property {number} categorie id of the categorie this product belongs to
+ * @property {number} category id of the category this product belongs to
  * @property {Date} created Date of first put on the menu
  * @property {Date} updated Date of when this product was updated
  */
 
 /**
- * Categorie.
- * @typedef {Object} Categorie
- * @property {number | null} id - ID of categorie, if defined
- * @property {string} name Name of categorie
+ * category.
+ * @typedef {Object} category
+ * @property {number | null} id - ID of category, if defined
+ * @property {string} name Name of category
  */
 
 export async function query(_query, values = []) {
@@ -99,31 +99,31 @@ export async function end() {
 /**
  * Insert a new product.
  *
- * @param {Product} product Serie to create.
- * @return {Product} Procut created, with ID.
+ * @param {Product} product Dish to create.
+ * @return {Product} Product created, with ID.
  */
 export async function insertProduct({
   name,
-  prize,
+  price,
   description,
   image,
-  categorie,
+  category,
 }) {
   const q = `
     INSERT INTO
       products
-      (name, prize, description, image, categorie)
+      (name, price, description, image, category)
     VALUES
       ($1, $2, $3, $4, $5)
     RETURNING
-      id, name, prize, description, image, categorie
+      id, name, price, description, image, category
   ;`;
   const values = [
     xss(name),
-    prize,
+    price,
     xss(description),
     xss(image),
-    categorie,
+    category,
   ];
 
   try {
@@ -138,12 +138,12 @@ export async function insertProduct({
 
 
 /**
- * Insert a categorie.
+ * Insert a category.
  *
- * @param {string} name Name of categorie
- * @return {Categorie} Categorie created, with ID.
+ * @param {string} name Name of category
+ * @return {category} category created, with ID.
  */
-export async function insertCategorie(name) {
+export async function insertCategory(name) {
   try {
     const result = await query(
       'INSERT INTO categories (name) VALUES ($1) RETURNING id, name;',

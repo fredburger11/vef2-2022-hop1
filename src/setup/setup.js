@@ -17,6 +17,7 @@ const IMG_DIR = './../../data/img';
 const SQL_DIR = './../../sql';
 
 const path = dirname(fileURLToPath(import.meta.url));
+console.log(path);
 
 /**
  * Möppun á milli skráarnafns myndar og slóðar á Cloudinary
@@ -42,12 +43,21 @@ const prodIds = new Map();
 const categIds = new Map();
 
 /**
+ * Droppar schema til að búa til upp á nýtt.
+ */
+async function dropSchema() {
+  const schemaFile = join(path, SQL_DIR, 'drop.sql');
+  const data = await readFile(schemaFile);
+  await query(data.toString('utf-8'));
+}
+
+/**
  * Les inn schema fyrir gagnagrunn úr SQL skrá.
  */
 async function schema() {
   const schemaFile = join(path, SQL_DIR, 'schema.sql');
   const data = await readFile(schemaFile);
-  await query(data);
+  await query(data.toString('utf-8'));
 }
 
 /**
@@ -114,7 +124,7 @@ async function products() {
     const csvId = item.id;
 
     // Búum til sérstaklega og setjum ID í staðinn
-    const { categories } = item;
+    const { category } = item;
 
     // Búum til Date object
     item.airDate = new Date(item.airDate);
@@ -123,8 +133,8 @@ async function products() {
 
     if (image) {
       item.image = image;
-    } else {
-      logger.warn(`Missing uploaded image for serie "${item.name}"`);
+    } else { /* TODO: okkur er sama um myndir í bili, laga seinna...
+      logger.warn(`Missing uploaded image for product "${item.name}"`); */
     }
 
     const { id } = await insertProduct(item);
@@ -133,7 +143,7 @@ async function products() {
     prodIds.set(csvId, { id, products: [] });
 
     for (const product of products.split(',')) {
-      const categId = await insertCategoryOrExisiting(categories);
+      const categId = await insertCategoryOrExisiting(category);
       //await insertCategory(id, categId);
     }
 
@@ -180,17 +190,20 @@ async function images() {
  * villumeðhöndlun mannleg: ef við sjáum villu lögum við villu.
  */
 async function main() {
-  await images();
-  logger.info('Images uploaded');
+  //await images();
+  //logger.info('Images uploaded');
+  await dropSchema()
+  //logger.info('Schema dropped')
   await schema();
-  logger.info('Schema created');
+  //logger.info('Schema created');
   await postSchemaSql();
-  logger.info('Post schema SQL run');
+  //logger.info('Post schema SQL run');
   await products();
-  logger.info('products & categories imported');
+  //logger.info('products & categories imported');
   await end();
 }
 
 main().catch((err) => {
-  logger.error(err);
+  //logger.error(err);
+  console.log(err);
 });

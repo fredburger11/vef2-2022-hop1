@@ -4,15 +4,15 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- menu tables --
 
-CREATE TABLE categories (
+CREATE TABLE IF NOT EXISTS categories (
   id SERIAL PRIMARY KEY UNIQUE,
   name VARCHAR(256) NOT NULL UNIQUE
 );
 
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
   id SERIAL PRIMARY KEY UNIQUE,
   name VARCHAR(256) NOT NULL UNIQUE,
-  prize INTEGER NOT NULL,
+  price INTEGER NOT NULL,
   description TEXT NOT NULL,
   image VARCHAR(256) NOT NULL,
   category INTEGER NOT NULL,
@@ -23,12 +23,12 @@ CREATE TABLE products (
 
 -- basket tables --
 
-CREATE TABLE basket (
+CREATE TABLE IF NOT EXISTS basket (
   id uuid PRIMARY KEY UNIQUE,
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE linesinbasket (
+CREATE TABLE IF NOT EXISTS linesinbasket (
   productId INTEGER NOT NULL,
   basketId uuid NOT NULL,
   nrofproducts INTEGER NOT NULL,
@@ -39,13 +39,13 @@ CREATE TABLE linesinbasket (
 
 -- order tables --
 
-CREATE TABLE anorder (
+CREATE TABLE IF NOT EXISTS anorder (
   id uuid PRIMARY KEY UNIQUE,
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   name TEXT NOT NULL
 );
 
-CREATE TABLE linesinorder (
+CREATE TABLE IF NOT EXISTS linesinorder (
   productId INTEGER NOT NULL,
   basketId uuid NOT NULL,
   nrofproducts INTEGER NOT NULL,
@@ -54,15 +54,16 @@ CREATE TABLE linesinorder (
   CONSTRAINT FK_bask_basket FOREIGN KEY (basketId) REFERENCES basket (id) ON DELETE CASCADE
 );
 
+DROP TYPE IF EXISTS stateoforder CASCADE;
 CREATE TYPE stateoforder AS ENUM ('NEW', 'PREPARE','COOKING', 'READY', 'FINISHED');
 
-CREATE TABLE statusoforders (
+CREATE TABLE IF NOT EXISTS statusoforders (
   id SERIAL PRIMARY KEY,
   status stateoforder,
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(256) NOT NULL,
   username VARCHAR(256) NOT NULL UNIQUE,

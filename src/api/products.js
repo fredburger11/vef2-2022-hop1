@@ -59,7 +59,7 @@ export async function listProducts(req, res) {
 
   const series = await pagedQuery(
     `SELECT
-        id, name, prize, description, image, category, created, updated
+        id, name, price, description, image, category, created, updated
       FROM
         series
       ORDER BY id created ASC`,
