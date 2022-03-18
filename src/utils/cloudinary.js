@@ -5,6 +5,15 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const {
+  CLOUD_NAME: cloud_name,
+  API_KEY: api_key,
+  API_SECRET: api_secret
+} = process.env;
+
+cloudinary.config({ cloud_name, api_key, api_secret })
+
+
 const resourcesAsync = util.promisify(cloudinary.api.resources);
 const uploadAsync = util.promisify(cloudinary.uploader.upload);
 

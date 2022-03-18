@@ -39,7 +39,7 @@ export async function createOrder(req, res) {
     const id = await singleQuery(
       `
         INSERT INTO
-          oders (name)
+          orders (name)
         VALUES
           ($1)
         RETURN id

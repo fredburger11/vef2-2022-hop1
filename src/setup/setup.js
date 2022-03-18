@@ -129,14 +129,13 @@ async function products() {
 
     const categId = await insertCategoryOrExisiting(category);
 
-    /* TODO: okkur er sama um myndir í bili, laga seinna...
     const image = imageCloudinaryUrl.get(item.image);
 
     if (image) {
       item.image = image;
     } else {
       logger.warn(`Missing uploaded image for product "${item.name}"`);
-    } */
+    }
     item.categoryId = categId;
 
     const { id } = await insertProduct(item);
@@ -191,8 +190,8 @@ async function images() {
  * villumeðhöndlun mannleg: ef við sjáum villu lögum við villu.
  */
 async function main() {
-  //await images();
-  //logger.info('Images uploaded');
+  await images();
+  logger.info('Images uploaded');
   await dropSchema()
   logger.info('Schema dropped')
   await schema();
