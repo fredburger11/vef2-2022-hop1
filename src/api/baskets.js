@@ -56,3 +56,71 @@ export async function addLineToBasket(req, res) {
   }
   return res.status(201).json(result);
 }
+
+export async function getLineFromBasket(req, res) {
+  const { cartid, id } = req.params;
+
+  const result = await singleQuery(`
+    SELECT *
+    FROM
+      linesinbasket
+    WHERE
+      basketId = $1
+      AND
+      productId = $2;`,
+    [xss(cartid), xss(id)]
+  );
+
+  if (result.rowCount === 0) {
+    return res.status(404).json({ error: 'Line not found' });
+  }
+  return res.status(200).json(result.rows[0]);
+}
+
+export async function updateLineInBasket(req, res) {
+  const { cartid, id } = req.params;
+  const { nrofproducts } = req.body;
+
+  const result = await singleQuery(`
+    UPDATE
+      linesinbasket
+    SET
+      nrofproducts = $3
+    WHERE
+      basketId = $1
+      AND
+      productId = $2
+    RETURNING *;`,
+    [xss(cartid), xss(id), xss(nrofproducts)]
+  );
+
+  if (!result || !result.rows[0]) {
+    return res.status(400).json({ error: 'Nothing to update' });
+  }
+  return res.status(200).json(result.rows[0]);
+}
+
+export async function deleteLineFromBasket(req, res) {
+  const { cartid, id } = req.params;
+
+  try {
+    const result = await deleteQuery(`
+      DELETE FROM
+        linesinbasket
+      WHERE
+        basketId = $1
+        AND
+        productId = $2;`,
+      [xss(cartid), xss(id)]
+    );
+
+    if (deletionrowCount === 0) {
+      return res.status(404).end();
+    }
+
+    return res.status(200).json({});
+  } catch (e) {
+    logger.error(`Unable to delete line ${id}`, e);
+  }
+  return res.status(500).json(null);
+}

@@ -13,7 +13,6 @@ const {
 
 cloudinary.config({ cloud_name, api_key, api_secret })
 
-
 const resourcesAsync = util.promisify(cloudinary.api.resources);
 const uploadAsync = util.promisify(cloudinary.uploader.upload);
 
