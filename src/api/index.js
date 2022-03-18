@@ -5,7 +5,8 @@ import { fileURLToPath } from 'url';
 import { requireAuthentication, requireAdmin, addUserIfAuthenticated } from '../auth/passport.js';
 import { catchErrors } from '../utils/catchErrors.js';
 import { readFile } from '../utils/fs-helpers.js';
-import { listProductById, listProducts } from './products.js';
+import { createcategory, deleteCategory, listCategories, updateCategory } from './categories.js';
+import { createProduct, deleteProduct, listProductById, listProducts, updateProduct } from './products.js';
 
 
 
@@ -60,7 +61,7 @@ router.get('/', async (req, res) => {
  *  RESULT, // Eitthvað sem sendir svar til client ef allt OK
  * );
  */
-
+// TODO: bæta validation á allt!!!
 // Routes fyrir matseðil
 
 router.get(
@@ -72,6 +73,7 @@ router.post(
   '/menu',
   requireAdmin,
   /*býr til nýja vöru á matseðil*/
+  catchErrors(createProduct)
 );
 
 router.get(
@@ -83,34 +85,41 @@ router.patch(
   '/menu/:id',
   requireAdmin,
   /*uppfærir vöru*/
+  catchErrors(updateProduct)
 );
 
 router.delete(
   '/menu/:id',
   requireAdmin,
   /*eyðir vöru*/
+  catchErrors(deleteProduct)
 );
 
 router.get(
   '/categories',
   /*skilar síðu af flokkum*/
+  catchErrors(listCategories)
 );
 
 router.post(
   '/categories',
+  requireAdmin,
   /*býr til nýjan flokk*/
+  catchErrors(createcategory)
 );
 
 router.patch(
   '/categories/:id',
   requireAdmin,
   /*uppfærir flokk*/
+  catchErrors(updateCategory)
 );
 
 router.delete(
   '/categories/:id',
   requireAdmin,
   /*eyðir flokk*/
+  catchErrors(deleteCategory)
 );
 
 // Routes fyrir körfu

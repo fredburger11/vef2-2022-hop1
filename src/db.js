@@ -130,7 +130,7 @@ export async function insertProduct({
     const result = await query(q, values);
     return result.rows[0];
   } catch (e) {
-    logger.error('Error inserting serie', e);
+    logger.error('Error inserting product', e);
   }
 
   return null;

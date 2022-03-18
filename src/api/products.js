@@ -1,5 +1,5 @@
 import xss from 'xss';
-import { conditionalUpdate, deleteQuery, pagedQuery, singleQuery } from '../db.js';
+import { conditionalUpdate, deleteQuery, insertProduct, pagedQuery, singleQuery } from '../db.js';
 import { addPageMetadata } from '../utils/addPageMetadata.js';
 import { uploadImage } from '../utils/cloudinary.js';
 import { logger } from '../utils/logger.js';
@@ -122,6 +122,64 @@ export async function listProductById(req, res) {
   );
 
   return res.json(product);
+}
+
+export async function createProduct(req, res) {
+  const result = await insertProduct(req.body);
+
+  if (!result) {
+    return res.status(500).end();
+  }
+  return res.status(201).json(result);
+}
+
+export async function updateProduct(req, res) {
+  const { id } = req.params;
+  const { body } = req;
+
+  const fields = [
+    isString(body.name) ? 'name' : null,
+    isString(body.price) ? 'price' : null,
+    isString(body.description) ? 'description' : null,
+    isString(body.image) ? 'image' : null,
+    isString(body.categoryId) ? 'categoryId' : null,
+  ];
+
+  const values = [
+    isString(body.name) ? xss(body.name) : null,
+    isString(body.price) ? xss(body.price) : null,
+    isString(body.description) ? xss(body.description) : null,
+    isString(body.image) ? xss(body.image) : null,
+    isString(body.categoryId) ? xss(body.categoryId) : null,
+  ];
+
+  // gera eitthvað ef image breytist?
+
+  const result = await conditionalUpdate('products', id, fields, values);
+
+  if (!result || !result.rows[0]) {
+    return res.status(400).json({ error: 'Nothing to update' });
+  }
+  return res.status(200).json(result.rows[0]);
+}
+
+export async function deleteProduct(req, res) {
+  const { id } = req.params;
+
+  try {
+    const deletionrowCount = await deleteQuery(
+      `DELETE FROM products WHERE id = $1;`, [id]
+    );
+
+    if (deletionrowCount === 0) {
+      return res.status(404).end();
+    }
+
+    return res.status(200).json({});
+  } catch (e) {
+    logger.error(`unable to delete product ${id}`, e);
+  }
+  return res.status(500).json(null);
 }
 
 /*

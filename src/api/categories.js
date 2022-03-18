@@ -28,24 +28,50 @@ export async function listCategories(req, res) {
 
 export async function createcategory(req, res) {
   const { name } = req.body;
+  const result = await insertCategory(name);
+
+  if (!result) {
+    return res.status(500).end();
+  }
+  return res.status(201).json(result);
+}
+
+export async function updateCategory(req, res) {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  const result = await singleQuery(`
+    UPDATE
+      categories
+    SET
+      name = $2
+    WHERE
+      id = $1
+    RETURNING *;`,
+    [id, xss(name)]
+  );
+
+  if (!result || !result.rows[0]) {
+    return res.status(400).json({ error: 'Nothing to update' });
+  }
+  return res.status(200).json(result.rows[0]);
+}
+
+export async function deleteCategory(req, res) {
+  const { id } = req.params;
 
   try {
-    // TODO refactor, use db.js insertCategory
-    const newCategory = await singleQuery(
-      `
-        INSERT INTO
-        categories (name)
-        VALUES
-          ($1)
-        RETURNING
-          id, name
-      `,
-      [xss(name)],
+    const deletionrowCount = await deleteQuery(
+      `DELETE FROM categories WHERE id = $1;`, [id]
     );
-    return res.status(201).json(newCategory);
-  } catch (e) {
-    logger.error(`unable to create genre "${name}"`, e);
-  }
 
+    if (deletionrowCount === 0) {
+      return res.status(404).end();
+    }
+
+    return res.status(200).json({});
+  } catch (e) {
+    logger.error(`unable to delete category ${id}`, e);
+  }
   return res.status(500).json(null);
 }
