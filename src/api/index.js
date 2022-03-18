@@ -165,6 +165,7 @@ router.get(
   pagingQuerystringValidator,
   validationCheck,
   /*skilar körfu með cartid og reiknuðu heildarverði*/
+  catchErrors(listBasket)
 );
 
 router.post(
@@ -214,7 +215,7 @@ router.get(
   requireAdmin,
   pagingQuerystringValidator,
   validationCheck,
-  listOrders,
+  catchErrors(listOrders),
   /*Skilar síðu af pöntunum*/
 );
 
