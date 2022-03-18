@@ -38,7 +38,7 @@ const imageCloudinaryUrl = new Map();
  * Getum þá bætt vísanir við fyrir categories og products.
  * Uppfærum hlut eftir því sem við bætum við í gagnagrunn.
  */
-/* Þetta er líklega óþarfi, ekki relevant fyrir okkar gagnagrunn
+/* Þetta er líklega óþarfi, ekki relevant fyrir okkar gagnagrunn... eða hvað?
 const prodIds = new Map();
 */
 
@@ -129,15 +129,14 @@ async function products() {
 
     const categId = await insertCategoryOrExisiting(category);
 
-    /* TODO: okkur er sama um myndir í bili, laga
+    /* TODO: okkur er sama um myndir í bili, laga seinna...
     const image = imageCloudinaryUrl.get(item.image);
 
     if (image) {
       item.image = image;
-    } else {  seinna...
+    } else {
       logger.warn(`Missing uploaded image for product "${item.name}"`);
     } */
-    //item.image = 'N/A'; // breyta seinna
     item.categoryId = categId;
 
     const { id } = await insertProduct(item);

@@ -2,8 +2,10 @@ import express from 'express';
 import multer from 'multer';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { requireAuthentication, requireAdmin, addUserIfAuthenticated } from '../auth/passport.js';
+import { catchErrors } from '../utils/catchErrors.js';
 import { readFile } from '../utils/fs-helpers.js';
-
+import { listProducts } from './products.js';
 
 
 
@@ -45,3 +47,22 @@ router.get('/', async (req, res) => {
   const indexJson = await readFile(join(path, './index.json'));
   res.json(JSON.parse(indexJson));
 });
+
+/**
+ * Hér fylga allar skilgreiningar á routes, þær fylgja eftirfarandi mynstri:
+ *
+ * router.HTTP_METHOD(
+ *  ROUTE_WITH_PARAM,
+ *  VALIDATOR_MIDDLEWARE_1,
+ *  ...
+ *  VALIDATOR_MIDDLEWARE_N,
+ *  validationCheck, // Sendir validation villur, ef einhverjar
+ *  RESULT, // Eitthvað sem sendir svar til client ef allt OK
+ * );
+ */
+
+router.get(
+  '/menu',
+  catchErrors(listProducts)
+);
+
