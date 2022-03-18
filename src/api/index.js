@@ -18,7 +18,7 @@ import {
   atLeastOneBodyValueValidator,
 } from '../validation/validators.js';
 import { validationCheck } from '../validation/helpers.js';
-import { addLineToBasket, createBasket, deleteBasket } from './baskets.js';
+import { addLineToBasket, createBasket, deleteBasket, deleteLineFromBasket, getLineFromBasket, updateLineInBasket } from './baskets.js';
 
 
 
@@ -78,6 +78,8 @@ router.get('/', async (req, res) => {
 
 router.get(
   '/menu',
+  pagingQuerystringValidator,
+  validationCheck,
   catchErrors(listProducts)
 );
 
@@ -90,12 +92,16 @@ router.post(
 
 router.get(
   '/menu/:id',
+  pagingQuerystringValidator,
+  validationCheck,
   catchErrors(listProductById)
 );
 
 router.patch(
   '/menu/:id',
   requireAdmin,
+  adminValidator,
+  validationCheck,
   /*uppfærir vöru*/
   catchErrors(updateProduct)
 );
@@ -103,12 +109,16 @@ router.patch(
 router.delete(
   '/menu/:id',
   requireAdmin,
+  adminValidator,
+  validationCheck,
   /*eyðir vöru*/
   catchErrors(deleteProduct)
 );
 
 router.get(
   '/categories',
+  pagingQuerystringValidator,
+  validationCheck,
   /*skilar síðu af flokkum*/
   catchErrors(listCategories)
 );
@@ -116,6 +126,8 @@ router.get(
 router.post(
   '/categories',
   requireAdmin,
+  adminValidator,
+  validationCheck,
   /*býr til nýjan flokk*/
   catchErrors(createcategory)
 );
@@ -123,6 +135,8 @@ router.post(
 router.patch(
   '/categories/:id',
   requireAdmin,
+  adminValidator,
+  validationCheck,
   /*uppfærir flokk*/
   catchErrors(updateCategory)
 );
@@ -130,6 +144,8 @@ router.patch(
 router.delete(
   '/categories/:id',
   requireAdmin,
+  adminValidator,
+  validationCheck,
   /*eyðir flokk*/
   catchErrors(deleteCategory)
 );
@@ -138,40 +154,57 @@ router.delete(
 
 router.post(
   '/cart',
+  pagingQuerystringValidator,
+  validationCheck,
   /*býr til körfu og skilar*/
   catchErrors(createBasket)
 );
 
 router.get(
   '/cart/:cartid',
+  pagingQuerystringValidator,
+  validationCheck,
   /*skilar körfu með cartid og reiknuðu heildarverði*/
 );
 
 router.post(
   '/cart/:cartid',
+  pagingQuerystringValidator,
+  validationCheck,
   /*bætir vöru við í körfu*/
   catchErrors(addLineToBasket)
 );
 
 router.delete(
   '/cart/:cartid',
+  pagingQuerystringValidator,
+  validationCheck,
   /*Eyðir körfu með cartid*/
   catchErrors(deleteBasket)
 );
 
 router.get(
   'cart/:cartid/line/:id',
+  pagingQuerystringValidator,
+  validationCheck,
   /*skilar línu í körfu*/
+  catchErrors(getLineFromBasket)
 );
 
 router.patch(
   'cart/:cartid/line/:id',
+  pagingQuerystringValidator,
+  validationCheck,
   /*uppfærir fjölda í línu*/
+  catchErrors(updateLineInBasket)
 );
 
 router.delete(
   'cart/:cartid/line/:id',
+  pagingQuerystringValidator,
+  validationCheck,
   /*eyðir línu úr körfu*/
+  catchErrors(deleteLineFromBasket)
 );
 
 // Routes fyrir pantanir

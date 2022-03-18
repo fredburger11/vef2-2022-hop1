@@ -53,7 +53,7 @@ const isPatchingAllowAsOptional = (value, { req }) => {
 export const nameValidator = body('name')
   .if(isPatchingAllowAsOptional)
   .isLength({ min: 1, max: 256 })
-  .withMessage('name is required, max 128 characters');
+  .withMessage('name is required, max 256 characters');
 
 export const emailValidator = body('email')
   .if(isPatchingAllowAsOptional)
@@ -270,7 +270,7 @@ export const productValidators = [
 
 export const validateStatus = body('status')
   .isIn(['NEW', 'PREPARE', 'COOKING', 'READY', 'FINISHED'])
-  .withMessage('state must be one of "want to watch", "watching", "watched"');
+  .withMessage('state must be one of "NEW", "PREPARE", "COOKING", "READY", "FINISHED"');
 
 export function atLeastOneBodyValueValidator(fields) {
   return body()
