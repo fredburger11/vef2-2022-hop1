@@ -18,8 +18,25 @@ export async function createBasket(req, res) {
 }
 
 export async function listBasket(req, res) {
-  const { id } = req.params;
-  /*... vantar að útfæra ...*/
+  const { cartid } = req.params;
+  /*... vantar að útfæra summu af verði ...*/
+  const q = `
+    SELECT *
+    FROM basket
+    INNER JOIN
+    (SELECT basketId,sum(price) FROM linesinbasket)
+    WHERE id = $1
+  `;
+
+  const result = await singleQuery(
+    'SELECT * FROM linesinbasket WHERE basketId =$1;',
+    [xss(cartid)]
+  );
+
+  if (!result || result.rowCount === 0) {
+    return res.status(400).json({ error: 'No cart found' });
+  }
+  return res.status(200).json(result);
 }
 
 export async function deleteBasket(req, res) {
