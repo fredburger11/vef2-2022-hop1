@@ -7,6 +7,7 @@ import { catchErrors } from '../utils/catchErrors.js';
 import { readFile } from '../utils/fs-helpers.js';
 import { createcategory, deleteCategory, listCategories, updateCategory } from './categories.js';
 import { createProduct, deleteProduct, listProductById, listProducts, updateProduct } from './products.js';
+import { listUser, listUsers, updateUser } from './users.js';
 
 
 
@@ -193,39 +194,27 @@ router.post(
 router.get(
   '/users',
   requireAdmin,
+  validationCheck,
+  pagingQuerystringValidator,
+  listUsers,
   /*skilar síðu af notendum*/
 );
 
 router.get(
   '/users/:id',
   requireAdmin,
+  validateResourceExists(listUser),
+  validationCheck,
+  returnResource,
   /*Skilar notanda*/
 );
 
 router.patch(
   '/users/:id',
   requireAdmin,
+  validateResourceExists(listUser),
+  adminValidator,
+  validationCheck,
+  catchErrors(updateUser),
   /*breytir hvort notandi er stjórnandi eða ekki, aðeins ef notandi er ekki að breyta sér sjálfum*/
-);
-
-router.post(
-  '/users/register',
-  /*býr til nýjan (ekki admin) notanda*/
-);
-
-router.post(
-  '/users/login',
-  /* skilar token ef rétt gögn*/
-);
-
-router.get(
-  '/users/me',
-  requireAuthentication,
-  /*skilar upplýsingum um notanda sem á token*/
-);
-
-router.patch(
-  '/users/me',
-  requireAuthentication,
-  /*uppfærir netfang og/eða lykilorð*/
 );

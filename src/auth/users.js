@@ -15,17 +15,17 @@ const {
   BCRYPT_ROUNDS: bcryptRounds = 1,
 } = process.env;
 
-export async function createUser(username, email, password) {
+export async function createUser(name, username, email, password) {
   const hashedPassword = await bcrypt.hash(password, parseInt(bcryptRounds, 10));
 
   const q = `
     INSERT INTO
-      users (username, email, password)
+      users (name, username, email, password)
     VALUES
-      ($1, $2, $3)
+      ($1, $2, $3, $4)
     RETURNING *`;
 
-  const values = [xss(username), xss(email), hashedPassword];
+  const values = [xss(name), xss(username), xss(email), hashedPassword];
   const result = await query(
     q,
     values,
