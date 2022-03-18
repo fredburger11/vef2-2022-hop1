@@ -14,7 +14,7 @@ export const pagingQuerystringValidator = [
   query('offset')
     .optional()
     .isInt({ min: 0 })
-    .withMessage('query parameter "offset" must be an int, 0 or larget'),
+    .withMessage('query parameter "offset" must be an int, 0 or larger'),
   query('limit')
     .optional()
     .isInt({ min: 1 })
@@ -86,7 +86,7 @@ export const usernameDoesNotExistValidator = body('username')
     return Promise.resolve();
   });
 
-export const usernameAndPaswordValidValidator = body('username')
+export const usernameAndPasswordValidValidator = body('username')
   .custom(async (username, { req: { body: reqBody } = {} }) => {
     // Can't bail after username and password validators, so some duplication
     // of validation here

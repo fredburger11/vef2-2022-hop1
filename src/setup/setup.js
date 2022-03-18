@@ -194,17 +194,16 @@ async function main() {
   //await images();
   //logger.info('Images uploaded');
   await dropSchema()
-  //logger.info('Schema dropped')
+  logger.info('Schema dropped')
   await schema();
-  //logger.info('Schema created');
+  logger.info('Schema created');
   await postSchemaSql();
-  //logger.info('Post schema SQL run');
+  logger.info('Post schema SQL run');
   await products();
-  //logger.info('products & categories imported');
+  logger.info('products & categories imported');
   await end();
 }
 
 main().catch((err) => {
-  //logger.error(err);
-  console.log(err);
+  logger.error(err);
 });

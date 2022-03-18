@@ -55,17 +55,47 @@ async function serieSeasons(id) {
 }
 */
 export async function listProducts(req, res) {
-  const { offset = 0, limit = 10 } = req.query;
+  const { category, search, offset = 0, limit = 10 } = req.query;
 
-  const products = await pagedQuery(
-    `SELECT
+  let products;
+  if (!category) {
+    if (!search) {
+      products = await pagedQuery(
+        `SELECT
+            id, name, price, description, image, categoryId, created, updated
+          FROM
+            products
+          ORDER BY created DESC`,
+        [],
+        { offset, limit },
+      );
+    } else {
+      products = await pagedQuery(
+        `SELECT
+            id, name, price, description, image, categoryId, created, updated
+          FROM
+            products
+          WHERE
+            name ILIKE $1 OR description ILIKE $1
+          ORDER BY created DESC`,
+        [`%${xss(search)}%`],
+        { offset, limit },
+      );
+    }
+  } else {
+    products = await pagedQuery(`
+      SELECT
         id, name, price, description, image, categoryId, created, updated
       FROM
         products
-      ORDER BY created DESC`,
-    [],
-    { offset, limit },
-  );
+      WHERE
+        categoryId = $1
+      ORDER BY created DESC
+      `,
+      [xss(category)],
+      { offset, limit },
+    );
+  }
 
   const productsWithPage = addPageMetadata(
     products,
@@ -75,6 +105,7 @@ export async function listProducts(req, res) {
 
   return res.json(productsWithPage);
 }
+
 /*
 export async function listSerie(_, req) {
   const { serieId: id } = req.params;

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import { requireAuthentication, requireAdmin, addUserIfAuthenticated } from '../auth/passport.js';
 import { catchErrors } from '../utils/catchErrors.js';
 import { readFile } from '../utils/fs-helpers.js';
-import { listProducts } from './products.js';
+import { listProducts, listProductsInCategory } from './products.js';
 
 
 
@@ -65,4 +65,3 @@ router.get(
   '/menu',
   catchErrors(listProducts)
 );
-
