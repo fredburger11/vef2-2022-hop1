@@ -31,8 +31,8 @@ POST:
 }'
 http://localhost:3000/users/login/
 
-curl --location --request GET 'http://localhost:3000/users/me/'
-curl --location --request GET 'http://localhost:3000/'
-curl --location --request GET 'http://localhost:3000/menu'
-curl --location --request GET 'http://localhost:3000/menu?category=1'
-curl --location --request GET 'http://localhost:3000/menu?search=humar'
+curl --location --request GET 'http://localhost:3000/users/me/'  
+curl --location --request GET 'http://localhost:3000/'  
+curl --location --request GET 'http://localhost:3000/menu'  
+curl --location --request GET 'http://localhost:3000/menu?category=1'  
+curl --location --request GET 'http://localhost:3000/menu?search=humar'  
